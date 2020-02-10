@@ -15,9 +15,13 @@ class TaskController extends Controller
      */
     public function index()
     {
+        if(\Auth::check()) {
         $tasks = \Auth::user()->tasks()->orderBy('created_at', 'desc')->paginate(10);
         
         return view('tasks.index', ['tasks' => $tasks]);
+        } else {
+        return view('welcome');    
+        }
     }
 
     /**
@@ -58,9 +62,13 @@ class TaskController extends Controller
      */
     public function show($id)
     {
+        if (\Auth::id() === Task::find($id)->user_id) {
         $task = Task::find($id);
         
         return view('tasks.show', ['task' => $task]);
+        } else {
+            return redirect('tasks');
+        }
     }
 
     /**
@@ -71,9 +79,14 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
+        if (\Auth::id() === Task::find($id)->user_id) {
+        
         $task = Task::find($id);
         
         return view('tasks.edit', ['task' => $task]);
+        } else {
+        return view('welcome');    
+        }
     }
 
     /**
@@ -91,6 +104,8 @@ class TaskController extends Controller
         
         $task->content = $request->content;
         $task->status = $request->status;
+        
+        $task->save();
         
         return redirect('tasks');
     }
