@@ -85,7 +85,7 @@ class TaskController extends Controller
         
         return view('tasks.edit', ['task' => $task]);
         } else {
-        return view('welcome');    
+        return view('tasks');    
         }
     }
 
