@@ -62,7 +62,12 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        if (\Auth::id() === Task::find($id)->user_id) {
+        if (Task::find($id) === null) {
+            
+            return redirect('/');
+            
+        } elseif (\Auth::id() === Task::find($id)->user_id) {
+        
         $task = Task::find($id);
         
         return view('tasks.show', ['task' => $task]);
@@ -79,13 +84,18 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        if (\Auth::id() === Task::find($id)->user_id) {
+        if (Task::find($id) === null) {
+            
+        return redirect('/'); 
+        
+        } elseif (\Auth::id() === Task::find($id)->user_id) {
         
         $task = Task::find($id);
         
         return view('tasks.edit', ['task' => $task]);
+        
         } else {
-        return view('tasks');    
+        return redirect('tasks');    
         }
     }
 
